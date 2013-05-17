@@ -1,4 +1,4 @@
-DELMITER ;;
+DELIMITER ;;
 
 /*!50003 CREATE*/ /*!50020 DEFINER=`test`@`localhost`*/ /*!50003 PROCEDURE `Test_Procedure`(
 
