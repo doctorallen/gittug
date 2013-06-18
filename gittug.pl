@@ -5,6 +5,10 @@ use warnings;
 #set vars 
 my $file_names;
 my @split_names;
+my $username='test';
+my $password='test';
+my $database_server='test.net';
+my $database='test';
 
 #run the pull command
 `git pull origin master`;
@@ -19,13 +23,17 @@ foreach my $file_name (@split_names) {
 	#if the file is an sql file
 	if ( /\.sql$/ ) {
 		#get the name of the procedure, without the extension
-		my $name = substr($file_name, 0, -4);
-		#do magic
-		print "SQL:$file_name";
-		print "NAME:$name";
-		`mysql -utest -ptest test -e 'drop procedure if exists $name;'`;
-		`mysql -utest -ptest test < $file_name`;
+		#we use substr 5,-4 to ignore the file extension and the directory
+		my $name = substr($file_name, 5, -4);
+		#get the database name (the directory)
+		my $database=substr($file_name, 0, 4);
+		#print information
+		print "SQL:$file_name\n";
+		print "NAME:$name\n";
+		print "DATABASE:$database\n";
+		#remove procedure
+		`mysql -u$username -p$password -h$database_server $database -e 'drop procedure if exists $name;'`;
+		#source procedure file
+		`mysql -u$username -p$password -h$database_server $database < $file_name`;
 	}
-	print $file_name;
-
 }
